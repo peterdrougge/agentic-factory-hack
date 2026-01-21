@@ -364,6 +364,7 @@ dotnet run
 ```
 </details>
 <br/>
+
 🎉 Congratulations! You've built a **Repair Planner Agent** in .NET using **GitHub Copilot**.
 
 ## 🚀 Go Further

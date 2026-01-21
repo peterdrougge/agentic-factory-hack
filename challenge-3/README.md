@@ -5,6 +5,7 @@ Welcome to Challenge 3!
 In this challenge, you'll work with two specialized AI agents that optimize factory operations through intelligent maintenance scheduling and automated supply chain management.
 
 **Expected Duration:** 60 minutes
+
 **Prerequisites**: [Challenge 0](../challenge-0/challenge-0.md) successfully completed
 
 ## 🎯 Objective
@@ -91,8 +92,6 @@ What you get in traces:
 - **Cosmos DB operations**: reads/writes to containers used by the agents
 - **Failures with context**: exceptions + which step failed
 
-How tracing is enabled:
-
 Tracing is designed to be **automatic when configured**: if the tracing dependencies are present and an Application Insights connection string is available, the agents will emit rich traces covering both the workflow steps and model calls.
 
 ## ✅ Tasks
@@ -115,60 +114,61 @@ What it does
 #### Task 1.1 Run the Agent
 
 ```bash
-cd /workspaces/factory-hack/challenge-3
+# # Ensure you are located in the challenge-3 directory
+cd challenge-3
+
 python agents/maintenance_scheduler_agent.py wo-2024-456
 ```
 
 ---
 
-#### Task 1.2 Review the output
-
 <details>
-<summary>Example console output</summary>
+<summary>You should see an output similar to this:</summary>
 
 ```text
-=== Predictive Maintenance Agent ===
-
 📊 Agent Framework tracing enabled (Azure Monitor)
-   Traces sent to: InstrumentationKey=...
+   Traces sent to: InstrumentationKey=05a5a2ca-aa92-4118-ba1a-c7086eca58c9
    View in Azure AI Foundry portal: https://ai.azure.com -> Your Project -> Tracing
 
    Checking existing agent versions in portal...
-   Found existing version: 1.0
-   Creating new version: 2.0
-   Registering MaintenanceSchedulerAgent v2.0 in Azure AI Foundry portal...
-   ✅ MaintenanceSchedulerAgent v2.0 registered successfully!
+   Found 0 existing versions
+   Creating new version (will be version #1)...
+   Registering MaintenanceSchedulerAgent in Azure AI Foundry portal...
+   ✅ New version created!
+      Agent ID: MaintenanceSchedulerAgent:1
+   Verifying creation...
+   Total versions now in portal: 1
+   Check portal at: https://ai.azure.com
 
 1. Retrieving work order...
-   ✓ Work Order: WO-001
-   Machine: machine-001
-   Fault: Temperature Sensor Malfunction
+   ✓ Work Order: wo-2024-456
+   Machine: machine-004
+   Fault: 
    Priority: high
 
 2. Analyzing historical maintenance data...
-   ✓ Found 3 historical maintenance records
+   ✓ Found 2 historical maintenance records
 
 3. Checking available maintenance windows...
-   ✓ Found 17 available windows in next 14 days
+   ✓ Found 14 available windows in next 14 days
 
 4. Running AI predictive analysis...
+   Using persistent chat history for machine: machine-004
+   ✅ Using agent: 60d02159-de4a-4dd2-a39c-33191aa2ea25
    ✓ Analysis complete!
 
 === Predictive Maintenance Schedule ===
-Schedule ID: sched-1735845678
-Machine: machine-001
-Scheduled Date: 2026-01-04 22:00
+Schedule ID: sched-1769021150.421991
+Machine: machine-004
+Scheduled Date: 2026-01-22 22:00
 Window: 22:00 - 06:00
 Production Impact: Low
-Risk Score: 85/100
-Failure Probability: 70.0%
+Risk Score: 82/100
+Failure Probability: 67.0%
 Recommended Action: URGENT
 
 Reasoning:
-Given the high priority work order and historical pattern of temperature sensor 
-failures on machine-001, immediate scheduling is recommended. The selected 
-weekend night window (Saturday 10PM - Sunday 6AM) minimizes production impact 
-while addressing the critical temperature sensor issue before potential failure.
+The work order is marked as high priority, indicating either a critical fault or a high risk of operational impact. The time since last maintenance is a little over a month, which is relatively short compared to typical MTBF (Mean Time Between Failures), but historical maintenance events on this machine (spindle bearing failure and load cell calibration drift) have resulted in substantial downtime and cost. While there are no previous occurrences of the specific fault type, the combination of high priority, recent significant failures, and the overall criticality of the equipment elevates risk. The selected window (first available, low production impact) ensures downtime cost is minimized while addressing the issue with urgency, but not immediate action, as the probability of catastrophic failure is moderate. Scheduling at the first available low-impact window balances risk mitigation with operational efficiency.
 
 5. Saving maintenance schedule...
    ✓ Schedule saved to Cosmos DB
@@ -178,10 +178,7 @@ while addressing the critical temperature sensor issue before potential failure.
 
 ✓ Predictive Maintenance Agent completed successfully!
 ```
-
 </details>
-
-What Gets Saved to Cosmos DB:
 
 <details>
 <summary>Example documents written/updated (Cosmos DB)</summary>
@@ -240,13 +237,8 @@ What it does
 #### Task 2.1: Run the Agent
 
 ```bash
-cd /workspaces/factory-hack/challenge-3
 python agents/parts_ordering_agent.py wo-2024-456
 ```
-
-#### Task 2.2: Review expected output
-
-When parts need ordering:
 
 <details>
 <summary>Example output (parts need ordering)</summary>
