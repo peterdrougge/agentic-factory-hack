@@ -15,7 +15,6 @@
       "allowedValues": [
         "swedencentral",
         "francecentral",
-        "germanywestcentral",
         "eastus2"
       ],
       "metadata": {

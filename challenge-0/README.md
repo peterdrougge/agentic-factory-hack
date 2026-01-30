@@ -376,10 +376,10 @@ WHERE c.machineType = "tire_curing_press"
 <summary>Find available technicians with curing press skills in the <code>Technicians</code> container</summary>
 
 ```sql
-SELECT c.name, c.skills, c.availability
+SELECT c.name, c.skills, c.available
 FROM c
 WHERE ARRAY_CONTAINS(c.skills, "tire_curing_press") 
-  AND c.availability = "available"
+  AND c.available = true
 ```
 
 </details>
